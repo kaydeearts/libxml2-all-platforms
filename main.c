@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
     
     xmlDocPtr doc; /* the resulting document tree */
 
-    doc = xmlReadFile(filename, NULL, 0);
+    doc = xmlReadFile(argv[1], NULL, 0);
 
     return(0);
 }
