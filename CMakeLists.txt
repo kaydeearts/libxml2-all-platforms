@@ -12,3 +12,10 @@ include(ExternalLibXML2)
 target_include_directories(hello_world PUBLIC ${LIBXML2_INCLUDE_DIR} ${LIBXML2_INCLUDE_DIR_2})
 target_link_libraries(hello_world PUBLIC libxml2)
 install(TARGETS hello_world DESTINATION bin)
+
+include(CheckLibraryExists)
+CHECK_LIBRARY_EXISTS(m floor "" HAVE_M_LIB)
+
+if(HAVE_M_LIB)
+    target_link_libraries(hello_world PRIVATE m)
+endif()
