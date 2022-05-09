@@ -1,16 +1,59 @@
+/**
+ * section: Parsing
+ * synopsis: Parse an XML file to a tree and free it
+ * purpose: Demonstrate the use of xmlReadFile() to read an XML file
+ *          into a tree and xmlFreeDoc() to free the resulting tree
+ * usage: parse1 test1.xml
+ * test: parse1 test1.xml
+ * author: Daniel Veillard
+ * copy: see Copyright for the status of this software.
+ */
+
 #include <stdio.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-int main(int argc, char **argv) {
-    printf("Testing libxml2\n");
-
-    if (argc != 2)
-        return(1);
-    
+/**
+ * example1Func:
+ * @filename: a filename or an URL
+ *
+ * Parse the resource and free the resulting tree
+ */
+static void
+example1Func(const char *filename) {
     xmlDocPtr doc; /* the resulting document tree */
 
-    doc = xmlReadFile(argv[1], NULL, 0);
+    doc = xmlReadFile(filename, NULL, 0);
+    if (doc == NULL) {
+        fprintf(stderr, "Failed to parse %s\n", filename);
+	return;
+    }
+    xmlFreeDoc(doc);
+}
 
+int main(int argc, char **argv) {
+    printf("Testing Libxml2 Parsing\n");
+    if (argc != 2)
+        return(1);
+
+    /*
+     * this initialize the library and check potential ABI mismatches
+     * between the version it was compiled for and the actual shared
+     * library used.
+     */
+    LIBXML_TEST_VERSION
+
+    printf("About to parse document\n");
+    example1Func(argv[1]);
+    printf("Parsed document\n");
+
+    /*
+     * Cleanup function for the XML library.
+     */
+    xmlCleanupParser();
+    /*
+     * this is to debug memory for regression tests
+     */
+    xmlMemoryDump();
     return(0);
 }
